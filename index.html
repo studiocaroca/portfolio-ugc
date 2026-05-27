@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Romina Levy Gagliardini · Portfolio UGC</title>
+
+  <!-- Google Fonts: Playfair Display + Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    /* =========================================
+       TOKENS & RESET
+    ========================================= */
+    :root {
+      --navy:    #0D1B4B;
+      --blue:    #6BB8E8;
+      --elec:    #4169E1;
+      --white:   #FFFFFF;
+      --serif:   'Playfair Display', Georgia, serif;
+      --sans:    'Montserrat', Arial, sans-serif;
+      --radius:  16px;
+      --gap:     1rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; height: auto; }
+    a   { color: inherit; text-decoration: none; }
+    ul  { list-style: none; }
+    button { font-family: var(--sans); cursor: pointer; }
+
+    /* =========================================
+       SHIMMER PLACEHOLDER ANIMATION
+    ========================================= */
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position:  400px 0; }
+    }
+
+    .placeholder {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.04) 0%,
+        rgba(255,255,255,0.12) 50%,
+        rgba(255,255,255,0.04) 100%);
+      background-size: 800px 100%;
+      animation: shimmer 2.4s infinite linear;
+    }
+
+    /* =========================================
+       SCROLL FADE-IN
+    ========================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.d1 { transition-delay: .08s; }
+    .reveal.d2 { transition-delay: .18s; }
+    .reveal.d3 { transition-delay: .28s; }
+    .reveal.d4 { transition-delay: .38s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* =========================================
+       LAYOUT HELPERS
+    ========================================= */
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding-inline: 1.25rem;
+    }
+
+    .section-pad { padding-block: 4.5rem; }
+
+    .section-title {
+      font-family: var(--sans);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      line-height: 1.08;
+      font-size: clamp(1.75rem, 5vw, 3rem);
+    }
+
+    /* =========================================
+       NAVBAR
+    ========================================= */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 900;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: 1.25rem;
+      background: rgba(13, 27, 75, .82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(107,184,232,.18);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .nav-logo em { font-style: normal; color: var(--blue); }
+
+    .nav-links {
+      display: none;
+      gap: 1.4rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.8);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+
+    /* Hamburger */
+    .burger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .drawer {
+      position: fixed;
+      inset: 60px 0 auto;
+      z-index: 899;
+      background: rgba(13,27,75,.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(107,184,232,.2);
+      padding: 1.5rem 1.25rem;
+      display: none;
+    }
+    .drawer.open { display: block; }
+    .drawer a {
+      display: block;
+      padding: .6rem 0;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.85);
+      border-bottom: 1px solid rgba(107,184,232,.12);
+      transition: color .2s;
+    }
+    .drawer a:hover { color: var(--blue); }
+
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .burger     { display: none;  }
+    }
+
+    /* =========================================
+       1. HERO
+    ========================================= */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      padding: 80px 1.25rem 3rem;
+      overflow: hidden;
+    }
+
+    /* Decorative SVG canvas sitting behind content */
+    .hero-deco {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    /* Text block */
+    .hero-text { flex: 1; min-width: 0; }
+
+    .hero-eyebrow {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .75rem;
+    }
+
+    .hero-name-first {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: clamp(2.5rem, 9vw, 5rem);
+      line-height: .95;
+      color: var(--white);
+    }
+
+    .hero-name-last {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-style: italic;
+      font-size: clamp(1.8rem, 6vw, 4rem);
+      color: var(--blue);
+      margin-top: .15rem;
+      letter-spacing: .02em;
+      line-height: 1;
+    }
+
+    .hero-sub {
+      margin-top: 1rem;
+      font-size: clamp(.65rem, 1.8vw, .85rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .28em;
+      color: rgba(255,255,255,.5);
+    }
+
+    /* Tags */
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin-top: 1.4rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: .32rem .85rem;
+      border: 1px solid rgba(107,184,232,.45);
+      border-radius: 999px;
+      background: rgba(107,184,232,.1);
+      font-size: .68rem;
+      font-weight: 600;
+      color: var(--blue);
+      white-space: nowrap;
+      transition: background .22s, color .22s, transform .18s, border-color .22s;
+    }
+    .tag:hover {
+      background: var(--blue);
+      color: var(--navy);
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    /* Photo circle */
+    .hero-photo-wrap {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-photo {
+      width: clamp(190px, 40vw, 380px);
+      height: clamp(190px, 40vw, 380px);
+      border-radius: 50%;
+      border: 3px solid rgba(107,184,232,.5);
+      overflow: hidden;
+      background: rgba(107,184,232,.1);
+      box-shadow: 0 0 60px rgba(107,184,232,.18);
+    }
+    .hero-photo i { font-size: 3rem; opacity: .4; }
+    .hero-photo span {
+      font-size: .62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      opacity: .65;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .hero-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 3.5rem;
+      }
+      .hero-text { order: 1; }
+      .hero-photo-wrap { order: 2; }
+    }
+
+    /* =========================================
+       2. SOBRE MÍ
+    ========================================= */
+    #sobre-mi {
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    #sobre-mi .section-title { color: var(--elec); margin-bottom: 2rem; }
+
+    .sobre-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .sobre-text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sobre-text p {
+      font-size: 1rem;
+      line-height: 1.82;
+      color: #2a2a3a;
+      margin-bottom: .85rem;
+    }
+
+    .ugc-note {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: rgba(65,105,225,.07);
+      border-left: 3px solid var(--elec);
+      border-radius: 0 10px 10px 0;
+      font-size: .8rem;
+      line-height: 1.65;
+      color: #444;
+    }
+    .ugc-note strong { color: var(--elec); }
+
+    /* Columna derecha: foto modelo + mascotas juntas */
+    .sobre-fotos {
+      display: flex;
+      gap: .6rem;
+      flex-shrink: 0;
+      justify-content: center;
+    }
+
+    .sobre-photo {
+      border-radius: var(--radius);
+      overflow: hidden;
+      width: 190px;
+      flex-shrink: 0;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+    }
+    .sobre-photo img {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    /* Grid de mascotas al lado de la foto */
+    .pets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 72px);
+      gap: .45rem;
+      align-self: flex-start;
+    }
+    .pet-photo {
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+    .pet-photo--wide {
+      grid-column: span 2;
+      aspect-ratio: auto;
+    }
+    .pet-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* placeholder mientras no hay imagen */
+    .pet-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: rgba(107,184,232,.12);
+      border: 1px solid rgba(107,184,232,.25);
+    }
+
+    @media (min-width: 768px) {
+      .sobre-layout {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      .sobre-text {
+        overflow-y: auto;
+        align-self: stretch;
+      }
+      .sobre-fotos {
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+      .sobre-photo {
+        align-self: stretch;
+        width: 260px;
+      }
+      .pets-grid {
+        grid-template-columns: repeat(2, 88px);
+      }
+    }
+
+    /* =========================================
+       2b. MI COMUNIDAD
+    ========================================= */
+    #comunidad {
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    #comunidad .section-title {
+      color: rgba(13,27,75,.35);
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 600;
+      letter-spacing: .2em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .postit-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .postit {
+      background: #FFF9C4;
+      border-radius: 4px 4px 4px 4px;
+      padding: 2rem 2.4rem 2.4rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow:
+        4px 4px 0 #e8e090,
+        0 12px 40px rgba(0,0,0,.13);
+      transform: rotate(-1.2deg);
+      position: relative;
+    }
+
+    /* cinta adhesiva arriba */
+    .postit::before {
+      content: '';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 24px;
+      background: rgba(255,255,180,.75);
+      border: 1px solid rgba(0,0,0,.1);
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+
+    .postit-title {
+      font-family: var(--sans);
+      font-weight: 900;
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .22em;
+      color: rgba(0,0,0,.4);
+      margin-bottom: 1.4rem;
+    }
+
+    .postit-row {
+      display: flex;
+      align-items: baseline;
+      gap: .65rem;
+      padding: .55rem 0;
+      border-bottom: 1px dashed rgba(0,0,0,.12);
+    }
+    .postit-row:last-child { border-bottom: none; }
+
+    .postit-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      width: 1.4rem;
+      text-align: center;
+    }
+
+    .postit-num {
+      font-family: var(--sans);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .postit-desc {
+      font-size: .78rem;
+      font-weight: 600;
+      color: rgba(0,0,0,.55);
+      line-height: 1.3;
+    }
+
+    .postit-divider {
+      margin: 1rem 0 .9rem;
+      border: none;
+      border-top: 2px dashed rgba(0,0,0,.15);
+    }
+
+    .postit-subtitle {
+      font-size: .6rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: rgba(0,0,0,.35);
+      margin-bottom: .9rem;
+    }
+
+    /* =========================================
+       3. VIDEOS UGC
+    ========================================= */
+    #videos { background: var(--navy); }
+
+    #videos .section-title { color: var(--elec); margin-bottom: 1.5rem; }
+
+    .videos-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    /* 2-column grid on mobile, 3 on desktop */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .85rem;
+    }
+
+    /* Phone-mockup card */
+    .vcard {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(107,184,232,.2);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .28s, border-color .28s, box-shadow .28s;
+    }
+    .vcard:hover {
+      transform: translateY(-5px);
+      border-color: var(--blue);
+      box-shadow: 0 12px 40px rgba(107,184,232,.15);
+    }
+
+    /* Video dentro de la card */
+    .vcard-screen video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .vcard-screen::after { z-index: 2; }
+    .play-btn            { z-index: 3; }
+
+    /* 9:16 mockup area */
+    .vcard-screen {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      background: linear-gradient(160deg, rgba(107,184,232,.18), rgba(65,105,225,.28));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .vcard-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(13,27,75,.75) 100%);
+    }
+
+    /* Phone frame dots */
+    .vcard-screen::before {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,.22);
+      z-index: 3;
+    }
+
+    .play-btn {
+      position: relative;
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .22s, background .22s;
+    }
+    .play-btn i { color: var(--navy); font-size: .85rem; margin-left: 2px; }
+    .vcard:hover .play-btn { transform: scale(1.12); background: var(--blue); }
+    .vcard:hover .play-btn i { color: var(--white); }
+
+    .vcard-info { padding: .65rem .75rem .75rem; }
+    .vcard-cat {
+      font-size: .62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--blue);
+    }
+    .vcard-sub {
+      font-size: .68rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.55);
+      margin-top: .1rem;
+    }
+
+    /* Horizontal scroll strip — only on mobile (cards 7-9) */
+    .videos-strip {
+      display: flex;
+      gap: .85rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: .5rem;
+      margin-top: .85rem;
+    }
+    .videos-strip::-webkit-scrollbar { height: 3px; }
+    .videos-strip::-webkit-scrollbar-track { background: rgba(255,255,255,.05); }
+    .videos-strip::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+
+    .videos-strip .vcard {
+      flex: 0 0 140px;
+      scroll-snap-align: start;
+    }
+
+    @media (min-width: 768px) {
+      .videos-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+      .videos-strip { display: none; }
+    }
+
+    /* =========================================
+       4. FOTOS UGC
+    ========================================= */
+    #fotos { background: var(--blue); }
+
+    #fotos .section-title { color: var(--white); margin-bottom: 1.75rem; }
+
+    /* CSS Columns masonry */
+    .masonry {
+      columns: 1;
+      column-gap: .75rem;
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: .75rem;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .28s;
+    }
+    .masonry-item:hover { transform: scale(1.025); }
+    .masonry-item img { width: 100%; height: auto; display: block; }
+
+    .photo-ph {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: .4rem;
+      background: linear-gradient(135deg, rgba(13,27,75,.28), rgba(65,105,225,.22));
+      color: rgba(255,255,255,.7);
+    }
+    .photo-ph i { font-size: 1.5rem; opacity: .45; }
+    .photo-ph span {
+      font-size: .6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    @media (min-width: 640px)  { .masonry { columns: 2; } }
+    @media (min-width: 1024px) { .masonry { columns: 3; } }
+
+    /* =========================================
+       5. MIS SERVICIOS
+    ========================================= */
+    #servicios {
+      background: var(--white);
+      color: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #servicios .section-title { color: var(--elec); margin-bottom: 2rem; }
+
+    .servicios-inner { max-width: 640px; position: relative; z-index: 1; }
+
+    .svc-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .95rem 0;
+      border-bottom: 1px solid rgba(13,27,75,.08);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      transition: color .22s, padding-left .22s;
+    }
+    .svc-item:last-child { border-bottom: none; }
+    .svc-item:hover { color: var(--elec); padding-left: .5rem; }
+
+    .svc-icon { color: var(--elec); font-size: 1rem; flex-shrink: 0; }
+
+    /* Decorative curve — only visible on desktop */
+    .svc-curve-deco {
+      position: absolute;
+      right: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .07;
+      pointer-events: none;
+      display: none;
+    }
+    @media (min-width: 768px) { .svc-curve-deco { display: block; } }
+
+    /* =========================================
+       6. MARCAS — INFINITE MARQUEE
+    ========================================= */
+    #marcas {
+      background: var(--navy);
+      overflow: hidden;
+    }
+
+    #marcas .section-title {
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+      letter-spacing: .15em;
+    }
+
+    .marquee-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Fade edges */
+    .marquee-wrap::before,
+    .marquee-wrap::after {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      width: 100px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-wrap::before { left: 0;  background: linear-gradient(to right, var(--navy), transparent); }
+    .marquee-wrap::after  { right: 0; background: linear-gradient(to left,  var(--navy), transparent); }
+
+    /* The track is duplicated in HTML → animate by -50% for seamless loop */
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeScroll 28s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .brand-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1.2rem 1.5rem;
+      white-space: nowrap;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.42);
+      cursor: default;
+      transition: color .3s;
+    }
+    .brand-item:hover { color: var(--blue); }
+
+    .brand-sep { color: var(--elec); font-size: 1rem; opacity: .7; }
+
+    .brand-logo {
+      height: auto;
+      max-height: 90px;
+      width: auto;
+      max-width: none;
+      object-fit: contain;
+      opacity: .7;
+      transition: opacity .3s;
+      display: block;
+    }
+    .brand-item:hover .brand-logo { opacity: 1; }
+    .brand-txt {
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+    }
+
+    /* =========================================
+       7. MEDIA KIT
+    ========================================= */
+    #media-kit {
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    #media-kit .section-title { color: var(--elec); margin-bottom: .5rem; }
+
+    .mk-subtitle {
+      font-size: .85rem;
+      color: rgba(13,27,75,.55);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .mk-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) { .mk-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .mk-card {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.4rem;
+      border: 1px solid rgba(107,184,232,.35);
+      border-radius: var(--radius);
+      background: rgba(107,184,232,.07);
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .mk-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(107,184,232,.18);
+    }
+    .mk-emoji { font-size: 4rem; flex-shrink: 0; line-height: 1; }
+    .mk-card h3 {
+      font-size: .85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--navy);
+    }
+    .mk-card p { font-size: .75rem; color: rgba(13,27,75,.55); margin-top: .2rem; }
+
+    .btn-dl {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      background: var(--elec);
+      color: var(--white);
+      padding: .85rem 2rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      border: none;
+      cursor: not-allowed;
+      opacity: .7;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-dl:hover { opacity: .85; transform: translateY(-2px); }
+    .btn-dl-note {
+      display: block;
+      margin-top: .6rem;
+      font-size: .72rem;
+      color: rgba(13,27,75,.45);
+    }
+
+    /* =========================================
+       8. CONTÁCTAME
+    ========================================= */
+    #contacto {
+      background: var(--navy);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #contacto .section-title {
+      color: var(--white);
+      font-size: clamp(1.75rem, 5vw, 3rem);
+      margin-bottom: .4rem;
+    }
+
+    .contact-eyebrow {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-btns {
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+      align-items: center;
+      max-width: 380px;
+      margin-inline: auto;
+    }
+
+    .cbtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      width: 100%;
+      padding: .95rem 1.75rem;
+      border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--white);
+      transition: background .25s, border-color .25s, transform .2s;
+    }
+    .cbtn:hover {
+      background: rgba(107,184,232,.18);
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================
+       FOOTER
+    ========================================= */
+    footer {
+      background: rgba(0,0,0,.25);
+      border-top: 1px solid rgba(107,184,232,.1);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      font-size: .72rem;
+      color: rgba(255,255,255,.35);
+    }
+
+    /* =========================================
+       WHATSAPP FAB
+    ========================================= */
+    .wa-fab {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 950;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      box-shadow: 0 4px 18px rgba(37,211,102,.45);
+      transition: transform .22s, box-shadow .22s;
+    }
+    .wa-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(37,211,102,.6);
+    }
+
+    /* =========================================
+       BRUSH STROKE DECORATION
+    ========================================= */
+    .brush-deco {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="nav">
+  <a href="#hero" class="nav-logo">Romina <em>Levy Gagliardini</em></a>
+
+  <ul class="nav-links">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#comunidad">Comunidad</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#fotos">Fotos</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#marcas">Marcas</a></li>
+    <li><a href="#media-kit">Mi kit</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+
+  <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="drawer" id="drawer" role="dialog" aria-label="Menú de navegación">
+  <a href="#sobre-mi">Sobre mí</a>
+  <a href="#comunidad">Comunidad</a>
+  <a href="#videos">Videos</a>
+  <a href="#fotos">Fotos</a>
+  <a href="#servicios">Servicios</a>
+  <a href="#marcas">Marcas</a>
+  <a href="#media-kit">Mi kit</a>
+  <a href="#contacto">Contacto</a>
+</div>
+
+
+<!-- ============================================================
+     1. HERO
+============================================================ -->
+<section id="hero">
+
+  <!-- Decorative SVG curves behind everything -->
+  <div class="hero-deco" aria-hidden="true">
+    <svg width="100%" height="100%" viewBox="0 0 1200 900" preserveAspectRatio="xMaxYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Large sweeping curves -->
+      <path d="M1100 -50 C900 150 750 400 950 550 C1150 700 1050 800 900 900" stroke="#6BB8E8" stroke-width="2.5" opacity=".18"/>
+      <path d="M1150 0 C920 180 800 420 1000 570 C1200 720 1100 830 950 950" stroke="#4169E1" stroke-width="1.8" opacity=".12"/>
+      <path d="M1050 -80 C870 130 700 380 880 520 C1060 660 980 790 850 900" stroke="#6BB8E8" stroke-width="1.2" opacity=".1"/>
+      <!-- Circles / rings -->
+      <circle cx="1050" cy="160" r="90"  stroke="#4169E1" stroke-width="1.2" opacity=".14"/>
+      <circle cx="1000" cy="160" r="140" stroke="#6BB8E8" stroke-width=".8" opacity=".08"/>
+      <circle cx="950"  cy="680" r="110" stroke="#6BB8E8" stroke-width="1.4" opacity=".1"/>
+      <!-- Bottom-left accent -->
+      <path d="M0 900 C120 750 200 600 80 460 C-40 320 120 250 240 300" stroke="#6BB8E8" stroke-width="2" opacity=".1"/>
+      <circle cx="100" cy="800" r="70" stroke="#4169E1" stroke-width="1" opacity=".1"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+
+    <!-- TEXT -->
+    <div class="hero-text">
+      <p class="hero-eyebrow reveal">✦ &nbsp;Portfolio UGC</p>
+
+      <h1>
+        <span class="hero-name-first reveal d1">Romina</span>
+        <span class="hero-name-last  reveal d2">Levy Gagliardini</span>
+      </h1>
+
+      <p class="hero-sub reveal d3">Creadora de contenido &amp; UGC</p>
+
+      <div class="hero-tags">
+        <span class="tag reveal d1">📱 Creadora UGC</span>
+        <span class="tag reveal d2">✦ Modelo</span>
+        <span class="tag reveal d3">🎨 Diseñadora gráfica</span>
+        <span class="tag reveal d3">💻 Programadora</span>
+        <span class="tag reveal d4">♓ Pisciana</span>
+      </div>
+    </div>
+
+    <!-- Foto de Romina — archivo: img/foto-romina-hero.jpg -->
+    <div class="hero-photo-wrap reveal d2">
+      <div class="hero-photo">
+        <img
+          src="img/foto-romina-hero.jpg"
+          alt="Romina Levy Gagliardini"
+          style="width:100%;height:100%;object-fit:cover;object-position:center 15%;"
+        />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     2. SOBRE MÍ
+============================================================ -->
+<section id="sobre-mi" class="section-pad">
+  <div class="wrap">
+    <h2 class="section-title reveal">Sobre mí</h2>
+
+    <div class="sobre-layout">
+      <!-- Text block -->
+      <div class="sobre-text">
+        <p class="reveal d1">
+          Hola! Soy Romi ✨ Tengo 35 años, estudié Licenciatura en Sistemas y Licenciatura en Diseño y Comunicación Visual… asiq tengo más de 5 años de experiencia en ambos rubros… NERD!!! 💻😅
+        </p>
+        <p class="reveal d2">
+          Como buena pisciana multifacética también soy modelo y hace un tiempo me aventuré en el mundo de la creación de contenido UGC*, donde busco que el resultado sea auténtico, cercano y visualmente cuidado. 💁🏻‍♀️
+        </p>
+        <p class="reveal d3">
+          Tengo 🐶 3 perrhijos muy carismáticos y 🐱 8 michis con distintas gatonalidades 🐾
+        </p>
+        <p class="reveal d4">
+          📍 Soy de Avellaneda, Buenos Aires
+        </p>
+
+        <div class="ugc-note reveal d4">
+          <strong>¿Qué es UGC?</strong> El <em>User Generated Content</em> (Contenido Generado por el Usuario) es material creado por personas reales —no por las marcas— que autentica productos y servicios de forma cercana y confiable. Es el tipo de contenido que más convierte en redes sociales porque se siente genuino.
+        </div>
+      </div>
+
+      <!-- Columna derecha: modelo + mascotas -->
+      <div class="sobre-fotos reveal d2">
+
+        <!-- Foto de Romina — archivo: img/romina-modelo.jpg -->
+        <div class="sobre-photo">
+          <img
+            src="img/romina-modelo.jpg"
+            alt="Romina Levy Gagliardini"
+            style="width:100%;height:auto;object-position:center top;"
+          />
+        </div>
+
+        <!-- Grid de mascotas -->
+        <div class="pets-grid">
+
+          <!-- PLACEHOLDER: perro-1 — guardar como img/perro-1.jpg -->
+          <div class="pet-photo">
+            <img src="img/perro-1.jpg" alt="...">
+          </div>
+
+          <!-- PLACEHOLDER: perro-2 — guardar como img/perro-2.jpg -->
+          <div class="pet-photo">
+            <img src="img/perro-2.jpg" alt="...">
+          </div>
+
+          <!-- PLACEHOLDER: perro-3 — guardar como img/perro-3.jpg -->
+          <div class="pet-photo">
+            <img src="img/perro-3.jpg" alt="...">
+          </div>
+
+          <!-- PLACEHOLDER: gato-1 — guardar como img/gato-1.jpg -->
+          <div class="pet-photo">
+            <img src="img/gato-1.jpg" alt="...">
+          </div>
+
+          <!-- PLACEHOLDER: gato-2 — guardar como img/gato-2.jpg -->
+          <div class="pet-photo">
+            <img src="img/gato-2.jpg" alt="Gato 2">
+          </div>
+
+          <!-- PLACEHOLDER: gato-4 — guardar como img/gato-4.jpg -->
+          <div class="pet-photo">
+            <img src="img/gato-4.jpg" alt="Gato 4">
+          </div>
+
+          <!-- PLACEHOLDER: gato-3 (apaisada, ocupa 2 columnas) — guardar como img/gato-3.jpg -->
+          <div class="pet-photo pet-photo--wide">
+            <img src="img/gato-3.jpg" alt="Gato 3">
+          </div>
+
+        </div><!-- /pets-grid -->
+
+      </div><!-- /sobre-fotos -->
+    </div><!-- /sobre-layout -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     2b. MI COMUNIDAD
+============================================================ -->
+<section id="comunidad" class="section-pad">
+  <div class="wrap">
+    <h2 class="section-title reveal">Mi Comunidad</h2>
+
+    <div class="postit-wrap reveal d1">
+      <div class="postit">
+
+        <p class="postit-title">✦ Redes sociales</p>
+
+        <div class="postit-row">
+          <span class="postit-icon">📸</span>
+          <span class="postit-num">7.382</span>
+          <span class="postit-desc">seguidores en Instagram</span>
+        </div>
+
+        <div class="postit-row">
+          <span class="postit-icon">🎵</span>
+          <span class="postit-num">597</span>
+          <span class="postit-desc">seguidores en TikTok</span>
+        </div>
+
+        <hr class="postit-divider">
+        <p class="postit-subtitle">Audiencia de Instagram</p>
+
+        <div class="postit-row">
+          <span class="postit-icon">👥</span>
+          <span class="postit-num">56,5%</span>
+          <span class="postit-desc">hombres</span>
+        </div>
+
+        <div class="postit-row">
+          <span class="postit-icon">📍</span>
+          <span class="postit-num">17,4%</span>
+          <span class="postit-desc">de Buenos Aires</span>
+        </div>
+
+        <div class="postit-row">
+          <span class="postit-icon">🎂</span>
+          <span class="postit-num">32%</span>
+          <span class="postit-desc">tienen entre 35 y 44 años</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     3. VIDEOS UGC
+============================================================ -->
+<section id="videos" class="section-pad">
+  <div class="wrap">
+
+    <div class="videos-header">
+      <h2 class="section-title reveal">Videos UGC</h2>
+      <!-- Brush stroke SVG decoration -->
+      <svg class="brush-deco reveal d1" width="90" height="28" viewBox="0 0 90 28" fill="none" aria-hidden="true">
+        <path d="M4 22 C22 5 45 4 66 14 C76 19 83 14 87 9" stroke="#4169E1" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 26 C24 14 50 13 70 20 C80 24 86 20 88 17" stroke="#6BB8E8" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".5"/>
+      </svg>
+    </div>
+
+    <!-- Primary 2×3 grid (desktop) / 2×3 grid (mobile: shows top 6) -->
+    <div class="videos-grid">
+
+      <!-- Card 1 — PRODUCTO / RESEÑA -->
+      <div class="vcard reveal">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Review.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">REVIEW</div>
+          <div class="vcard-sub">Tecnología</div>
+        </div>
+      </div>
+
+      <!-- Card 2 — UNBOXING / EMANARE -->
+      <div class="vcard reveal d1">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Unboxing.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">UNBOXING</div>
+          <div class="vcard-sub">Productos esotéricos</div>
+        </div>
+      </div>
+
+      <!-- Card 3 — YOGA / ESTILO DE VIDA -->
+      <div class="vcard reveal d2">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tutorial.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">TUTORIAL</div>
+          <div class="vcard-sub">Tecnología</div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="vcard reveal d1">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tendencia.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Tendencia</div>
+          <div class="vcard-sub">Indumentaria</div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="vcard reveal d2">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Casual.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Casual</div>
+          <div class="vcard-sub">Lifestyle</div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="vcard reveal d3">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Review2.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Reseña</div>
+          <div class="vcard-sub">Producto de limpieza</div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="vcard reveal">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Review3.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">REVIEW</div>
+          <div class="vcard-sub">Beauty</div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="vcard reveal d1">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tendencia2.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Tendencia</div>
+          <div class="vcard-sub">Indumentaria</div>
+        </div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="vcard reveal d2">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tendencia3.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Tendencia</div>
+          <div class="vcard-sub">Indumentaria</div>
+        </div>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="vcard reveal d3">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tutorial2.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Tutorial</div>
+          <div class="vcard-sub">Productos de higiene personal</div>
+        </div>
+      </div>
+
+      <!-- Card 11 -->
+      <div class="vcard reveal d1">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Tutorial3.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Tutorial</div>
+          <div class="vcard-sub">Beauty</div>
+        </div>
+      </div>
+
+      <!-- Card 12 -->
+      <div class="vcard reveal d2">
+        <div class="vcard-screen">
+          <video src="videos/Levy%20Gagliardini%20Romina%20-%20Casual2.mp4" autoplay muted loop playsinline></video>
+          <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="vcard-info">
+          <div class="vcard-cat">Casual</div>
+          <div class="vcard-sub">Lifestyle</div>
+        </div>
+      </div>
+
+    </div><!-- /videos-grid -->
+
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     4. FOTOS UGC
+============================================================ -->
+<section id="fotos" class="section-pad">
+  <div class="wrap">
+    <h2 class="section-title reveal">Fotos UGC</h2>
+
+    <div class="masonry">
+
+      <div class="masonry-item reveal">
+        <img src="img/foto1.jpg" alt="Foto UGC 1">
+      </div>
+
+      <div class="masonry-item reveal d1">
+        <img src="img/foto2.jpg" alt="Foto UGC 2">
+      </div>
+
+      <div class="masonry-item reveal d2">
+        <img src="img/foto3.jpg" alt="Foto UGC 3">
+      </div>
+
+      <div class="masonry-item reveal">
+        <img src="img/foto4.jpg" alt="Foto UGC 4">
+      </div>
+
+      <div class="masonry-item reveal d1">
+        <img src="img/foto5.jpg" alt="Foto UGC 5">
+      </div>
+
+      <div class="masonry-item reveal d2">
+        <img src="img/foto6.jpg" alt="Foto UGC 6">
+      </div>
+
+      <div class="masonry-item reveal d3">
+        <img src="img/foto7.jpg" alt="Foto UGC 7">
+      </div>
+
+      <div class="masonry-item reveal d1">
+        <img src="img/foto8.jpg" alt="Foto UGC 8">
+      </div>
+
+      <div class="masonry-item reveal d2">
+        <img src="img/foto9.jpg" alt="Foto UGC 9">
+      </div>
+
+      <div class="masonry-item reveal d3">
+        <img src="img/foto10.jpg" alt="Foto UGC 10">
+      </div>
+
+    </div><!-- /masonry -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     5. MIS SERVICIOS
+============================================================ -->
+<section id="servicios" class="section-pad">
+
+  <!-- Decorative right-side SVG (desktop only) -->
+  <svg class="svc-curve-deco" width="280" height="520" viewBox="0 0 280 520" fill="none" aria-hidden="true">
+    <path d="M280 0 C160 90 110 230 200 330 C290 430 230 480 170 520" stroke="#4169E1" stroke-width="3" fill="none" opacity=".7"/>
+    <path d="M250 0 C130 100 90 240 180 340 C270 440 210 490 145 520" stroke="#6BB8E8" stroke-width="2" fill="none" opacity=".45"/>
+    <circle cx="210" cy="170" r="50" stroke="#4169E1" stroke-width="1.5" fill="none" opacity=".35"/>
+    <circle cx="180" cy="400" r="35" stroke="#6BB8E8" stroke-width="1" fill="none" opacity=".25"/>
+  </svg>
+
+  <div class="wrap">
+    <div class="servicios-inner">
+      <h2 class="section-title reveal">Mis Servicios</h2>
+
+      <div class="svc-item reveal d1"><span class="svc-icon">✦</span> Edición de video</div>
+      <div class="svc-item reveal d2"><span class="svc-icon">✦</span> Contenido UGC</div>
+      <div class="svc-item reveal d3"><span class="svc-icon">✦</span> Community Management</div>
+      <div class="svc-item reveal d4"><span class="svc-icon">✦</span> Fotografía</div>
+      <div class="svc-item reveal d4"><span class="svc-icon">✦</span> Mercado Clips</div>
+      <div class="svc-item reveal d4"><span class="svc-icon">✦</span> Más…</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     6. MARCAS — INFINITE MARQUEE
+============================================================ -->
+<section id="marcas" class="section-pad">
+  <div class="wrap">
+    <h2 class="section-title reveal">Marcas con las que trabajé</h2>
+  </div>
+
+  <!-- Marquee lives outside .wrap so it bleeds edge to edge -->
+  <div class="marquee-wrap" style="margin-top:2.5rem;" aria-label="Marcas con las que trabajé">
+    <!--
+      La lista se duplica exactamente para el loop seamless.
+      Reemplazar los textos "MARCA N" con logos reales:
+      <img src="logo-marca-n.svg" alt="Nombre de la marca" style="height:32px;filter:brightness(0) invert(1);opacity:.5;">
+    -->
+    <div class="marquee-track" aria-hidden="true">
+      <!-- Original set -->
+      <span class="brand-item"><img class="brand-logo" src="img/skip.png" alt="Skip"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/molinos-ala.png" alt="Molinos Ala"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/loreal-paris.png" alt="L'Oréal Paris"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/cif.png" alt="Cif"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/arm-and-hammer.png" alt="ARM & Hammer"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/gum.png" alt="GUM"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/get-wild.png" alt="Get Wild"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/paloma-mia.png" alt="Paloma Mía"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/not-another.png" alt="Not Another"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/batiste.png" alt="Batiste"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/garnier.png" alt="Garnier"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/vogue.png" alt="Vogue"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/cetteepoque.png" alt="Cettépoque"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/bossuet.png" alt="Bossuet"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/vichy.png" alt="Vichy"><span class="brand-sep">✦</span></span>
+      <!-- Exact duplicate for seamless loop (translateX -50%) -->
+      <span class="brand-item"><img class="brand-logo" src="img/skip.png" alt="Skip"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/molinos-ala.png" alt="Molinos Ala"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/loreal-paris.png" alt="L'Oréal Paris"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/cif.png" alt="Cif"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/arm-and-hammer.png" alt="ARM & Hammer"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/gum.png" alt="GUM"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/get-wild.png" alt="Get Wild"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/paloma-mia.png" alt="Paloma Mía"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/not-another.png" alt="Not Another"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/batiste.png" alt="Batiste"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/garnier.png" alt="Garnier"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/vogue.png" alt="Vogue"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/cetteepoque.png" alt="Cettépoque"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/bossuet.png" alt="Bossuet"><span class="brand-sep">✦</span></span>
+      <span class="brand-item"><img class="brand-logo" src="img/vichy.png" alt="Vichy"><span class="brand-sep">✦</span></span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     7. MEDIA KIT
+============================================================ -->
+<section id="media-kit" class="section-pad">
+  <div class="wrap">
+    <h2 class="section-title reveal">Mi Kit</h2>
+    <p class="mk-subtitle reveal d1">Equipamiento profesional para contenido de calidad</p>
+
+    <div class="mk-grid">
+
+      <div class="mk-card reveal d1">
+        <img src="img/luz.png" alt="Aro de luz Gadnic" style="width:140px;height:140px;object-fit:contain;flex-shrink:0;border-radius:10px;">
+        <div>
+          <h3>Aro de luz</h3>
+          <p>Gadnic 46 cm regulable 3300K a 5600K</p>
+        </div>
+      </div>
+
+      <div class="mk-card reveal d2">
+        <img src="img/mic.png" alt="Micrófono Gadnic MICRO050" style="width:140px;height:140px;object-fit:contain;flex-shrink:0;border-radius:10px;">
+        <div>
+          <h3>Micrófono</h3>
+          <p>Corbatero inalámbrico Gadnic MICRO050</p>
+        </div>
+      </div>
+
+      <div class="mk-card reveal d1">
+        <img src="img/s25+.png" alt="Samsung Galaxy S25+" style="width:140px;height:140px;object-fit:contain;flex-shrink:0;border-radius:10px;">
+        <div>
+          <h3>Celular</h3>
+          <p>Samsung Galaxy S25+</p>
+        </div>
+      </div>
+
+      <div class="mk-card reveal d2">
+        <img src="img/tripode.png" alt="Trípode Gadnic" style="width:140px;height:140px;object-fit:contain;flex-shrink:0;border-radius:10px;">
+        <div>
+          <h3>Trípode</h3>
+          <p>Gadnic TRIPODE27</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     8. CONTÁCTAME
+============================================================ -->
+<section id="contacto" class="section-pad">
+
+  <!-- Background decorative curves -->
+  <svg style="position:absolute;left:0;top:50%;transform:translateY(-50%);opacity:.08;pointer-events:none;" width="220" height="440" viewBox="0 0 220 440" fill="none" aria-hidden="true">
+    <path d="M0 0 C90 110 170 220 60 330 C-50 440 120 480 220 430" stroke="#6BB8E8" stroke-width="3" fill="none"/>
+    <circle cx="80" cy="200" r="60" stroke="#4169E1" stroke-width="1.5" fill="none"/>
+  </svg>
+  <svg style="position:absolute;right:0;top:50%;transform:translateY(-50%);opacity:.06;pointer-events:none;" width="180" height="400" viewBox="0 0 180 400" fill="none" aria-hidden="true">
+    <path d="M180 0 C80 100 20 220 130 320 C240 420 150 460 60 420" stroke="#6BB8E8" stroke-width="2.5" fill="none"/>
+  </svg>
+
+  <div class="wrap" style="position:relative;z-index:1;">
+    <h2 class="section-title reveal">Contáctame</h2>
+    <p class="contact-eyebrow reveal d1">Hablemos de tu idea</p>
+
+    <!-- Decorative brush SVG -->
+    <svg style="display:block;margin:0 auto 2.5rem;" width="130" height="22" viewBox="0 0 130 22" fill="none" aria-hidden="true">
+      <path d="M5 16 C35 3 65 3 95 10 C110 14 120 10 126 7" stroke="#6BB8E8" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M5 19 C38 10 68 10 98 16 C112 19 122 16 127 13" stroke="#4169E1" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5"/>
+    </svg>
+
+    <div class="contact-btns">
+      <a href="mailto:romina.lg@live.com" class="cbtn reveal d1">
+        <span>🧵</span> romina.lg@live.com
+      </a>
+      <a href="https://instagram.com/rominalevyg" target="_blank" rel="noopener noreferrer" class="cbtn reveal d2">
+        <span>📸</span> @rominalevyg &nbsp;·&nbsp; Instagram
+      </a>
+      <a href="https://tiktok.com/@rominalevyg" target="_blank" rel="noopener noreferrer" class="cbtn reveal d3">
+        <span>🎵</span> @rominalevyg &nbsp;·&nbsp; TikTok
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <p>&copy; 2026 - Romina Levy Gagliardini &nbsp;·&nbsp; Portfolio UGC &nbsp;·&nbsp; Hecho con 💙 </p>
+</footer>
+
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* --- Hamburger / drawer --- */
+  const burger  = document.getElementById('burger');
+  const drawer  = document.getElementById('drawer');
+
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* --- Match "Romina" width to "Levy Gagliardini" via letter-spacing --- */
+  function syncRominaWidth() {
+    const first = document.querySelector('.hero-name-first');
+    const last  = document.querySelector('.hero-name-last');
+    if (!first || !last) return;
+    first.style.letterSpacing = '0';           // reset before measuring
+    const lastW  = last.getBoundingClientRect().width;
+    const firstW = first.getBoundingClientRect().width;
+    if (!firstW || !lastW) return;
+    const chars  = first.textContent.trim().length;
+    first.style.letterSpacing = ((lastW - firstW) / chars) + 'px';
+  }
+
+  // Wait for web fonts, then run; re-run on resize
+  (document.fonts ? document.fonts.ready : Promise.resolve())
+    .then(() => requestAnimationFrame(syncRominaWidth));
+  window.addEventListener('resize', syncRominaWidth);
+
+
+  /* --- Scroll animations via Intersection Observer --- */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target); /* fire once */
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -24px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* --- Trigger hero elements immediately (above fold) --- */
+  document.querySelectorAll('#hero .reveal').forEach(el => {
+    el.classList.add('visible');
+  });
+
+  /* --- Video click-to-play with sound --- */
+  let activeVideo = null;
+  document.querySelectorAll('.vcard').forEach(card => {
+    card.addEventListener('click', () => {
+      const video = card.querySelector('video');
+      if (!video) return;
+      if (activeVideo && activeVideo !== video) {
+        activeVideo.muted = true;
+      }
+      if (activeVideo === video) {
+        video.muted = true;
+        activeVideo = null;
+        return;
+      }
+      video.muted = false;
+      video.play();
+      activeVideo = video;
+    });
+  });
+</script>
+
+<!-- Botón flotante WhatsApp -->
+<a
+  href="https://wa.me/541161790585?text=Quiero%20contratarte%20para%20generar%20contenido%20UGC%20para%20mi%20marca%20de..."
+  target="_blank"
+  rel="noopener noreferrer"
+  class="wa-fab"
+  aria-label="Escribinos por WhatsApp"
+>
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+</body>
+</html>

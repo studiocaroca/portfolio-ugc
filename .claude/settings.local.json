@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\karla\\\\Desktop\\\\portfolio-ugc\\\\img\")",
+      "WebSearch"
+    ]
+  }
+}
